@@ -13,18 +13,60 @@ module "fargate_resources" {
     app = {
       cpu    = 256
       memory = 512
-      weight = 3
+      weight = 1
     }
     sidecar = {
       cpu    = 128
       memory = 256
-      weight = 1
+      weight = 0
     }
   }
 
   batch_mode = false
 }
+
+output "task_resources" {
+  value = {
+    cpu    = module.fargate_resources.task_cpu
+    memory = module.fargate_resources.task_memory
+  }
+}
+
+output "container_resources" {
+  value = module.fargate_resources.container_resource_map
+}
 ```
+
+### Example Output
+
+For the input above, the module would produce an output similar to this:
+
+```hcl
+task_resources = {
+  "cpu" = 512
+  "memory" = 1024
+}
+
+container_resources = {
+  "app" = {
+    "cpu" = 384
+    "memory" = 768
+    "weight" = 1
+  }
+  "sidecar" = {
+    "cpu" = 128
+    "memory" = 256
+    "weight" = 0
+  }
+}
+```
+
+This output shows:
+
+1. The module selected a Fargate task size of 512 CPU units and 1024 MB memory, which is the smallest valid Fargate configuration that can accommodate the combined container requirements (384 CPU units and 768 MB memory).
+
+2. Since the sidecar container has weight 0, all of the excess resources (128 CPU units and 256 MB memory) were allocated to the app container based on the weight distribution.
+
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
