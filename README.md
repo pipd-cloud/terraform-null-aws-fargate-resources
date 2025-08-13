@@ -1,6 +1,6 @@
 # Terraform AWS Fargate Resources Calculator
 
-This Terraform module calculates optimal CPU and memory resource allocations for AWS Fargate tasks based on container requirements. The module takes your container resource needs as input and determines the appropriate Fargate task size that satisfies these requirements according to AWS Fargate's supported CPU and memory configurations. It intelligently distributes any unused resources among containers based on configurable weight parameters, ensuring efficient resource utilization. The module outputs both the recommended task-level resources and a map of optimized container-level resources. It also supports AWS Batch mode, automatically adjusting CPU values to match AWS Batch's requirements. Use this module to simplify resource planning for Fargate workloads and avoid manual calculations of valid task configurations.
+This Terraform module calculates optimal CPU and memory allocations for AWS Fargate tasks based on container requirements. It determines the smallest valid Fargate configuration that meets specified container resources, then distributes excess capacity according to configurable weights. The module supports AWS Batch mode with automatic CPU value adjustments and provides both task-level and container-level resource recommendations as outputs.
 
 ## Usage
 
